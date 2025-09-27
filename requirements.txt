@@ -1,0 +1,16 @@
+pandas
+numpy
+requests
+tqdm
+pyyaml
+python-dotenv
+openai
+streamlit
+matplotlib
+scipy
+scikit-learn
+weasyprint    # optional for HTML->PDF
+xlrd
+openpyxl
+tenacity
+joblib
