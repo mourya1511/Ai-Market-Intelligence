@@ -1,0 +1,46 @@
+kaggle_ingest.py
+
+The script cleans Kaggle’s Google Play Store dataset → fixes messy text → converts to numeric → removes duplicates → saves clean file.
+| Library                 | Why Used                                                                        | Where Used                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `pandas` (`pd`)         | For loading, cleaning, and transforming tabular data (DataFrame operations).    | Throughout (`read_csv`, column renames, applying functions, saving cleaned CSV). |
+| `numpy` (`np`)          | For representing missing values as `np.nan` and performing numeric ops.         | Used in parsing functions (`parse_installs`, `parse_size`).                      |
+| `re`                    | For **regular expressions**, removing non-numeric characters (e.g., “10,000+”). | In all parsing functions to clean text before converting to numbers.             |
+| `Path` (from `pathlib`) | For OS-independent folder creation and file handling.                           | Used in `main()` to ensure `outputs/` folder exists.                             |
+
+1)->parse_installs(x)
+👉 Converts values like "10,000+" → 10000
+🧹 Removes symbols (+, ,), keeps digits only.
+
+2️⃣ parse_price(x)
+👉 Converts "$4.99", "₹120", "Free" → numeric float
+💰 Replaces symbols, handles “Free” as 0.0.
+
+3️⃣ parse_size(x)
+👉 Converts "12M", "512k", "1.2G" → bytes
+📦 Handles "Varies with device" as missing (NaN).
+
+4)->standardize(df)
+| Step           | Action                                              |
+| -------------- | --------------------------------------------------- |
+| Rename columns | Converts inconsistent names to clean snake_case     |
+| Parse columns  | Uses above functions for installs, price, size      |
+| Convert date   | `last_updated` → datetime                           |
+| Deduplicate    | Keeps unique (app_name, category) with most reviews |
+| Normalize text | Trim spaces, lowercase category                     |
+
+5)->main() (S)
+Runs full process:
+🗂 Create outputs/ folder
+📥 Load CSV (pd.read_csv)
+🧽 Clean (standardize())
+💾 Save cleaned CSV (to_csv)
+✅ Print “Saved: …”
+
+In Simple Words
+
+Read raw file
+Clean & convert columns
+Remove duplicates
+Save final dataset
+
